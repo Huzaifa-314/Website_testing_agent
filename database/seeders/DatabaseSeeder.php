@@ -29,5 +29,9 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'), // Explicitly setting password for clarity in docs, though factory default is usually 'password'
             'role' => 'admin',
         ]);
+
+        $this->call([
+            TestDefinitionTemplateSeeder::class,
+        ]);
     }
 }

@@ -18,7 +18,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('websites', \App\Http\Controllers\WebsiteController::class);
     Route::resource('test-definitions', \App\Http\Controllers\TestDefinitionController::class);
-    Route::post('/test-definitions/{id}/run', [\App\Http\Controllers\TestDefinitionController::class, 'run'])->name('test-definitions.run');
+    Route::post('/test-definitions/{testDefinition}/run', [\App\Http\Controllers\TestDefinitionController::class, 'run'])->name('test-definitions.run');
+    Route::get('/test-definitions/{testDefinition}/execute/{testRun}', [\App\Http\Controllers\TestDefinitionController::class, 'execute'])->name('test-definitions.execute');
+    Route::get('/test-definitions/{testDefinition}/progress/{testRun}', [\App\Http\Controllers\TestDefinitionController::class, 'progress'])->name('test-definitions.progress');
     
     Route::get('/websites/{website}/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
     Route::get('/test-runs/{testRun}', [\App\Http\Controllers\ReportController::class, 'show'])->name('reports.show');

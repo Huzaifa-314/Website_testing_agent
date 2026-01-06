@@ -18,8 +18,8 @@
                 <p class="text-sm text-gray-500">Run ID: #{{ $testRun->id }} &bull; {{ $testRun->executed_at->toDayDateTimeString() }}</p>
             </div>
             <div>
-                 <span class="px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider {{ $testRun->result == 'pass' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200' }}">
-                    {{ $testRun->result }}
+                 <span class="px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider {{ $testRun->result == 'pass' ? 'bg-green-100 text-green-700 border border-green-200' : ($testRun->result == 'fail' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-gray-100 text-gray-700 border border-gray-200') }}">
+                    {{ $testRun->result ?? 'PENDING' }}
                 </span>
             </div>
         </div>
@@ -50,7 +50,11 @@
                 
                 <div class="mt-4 pt-4 border-t border-gray-700">
                     <span class="text-gray-500 mr-4 select-none">></span>
-                    <span class="{{ $testRun->result == 'pass' ? 'text-green-400' : 'text-red-400' }} font-bold">Process exited with result: {{ strtoupper($testRun->result) }}</span>
+                    @if($testRun->result)
+                        <span class="{{ $testRun->result == 'pass' ? 'text-green-400' : 'text-red-400' }} font-bold">Process exited with result: {{ strtoupper($testRun->result) }}</span>
+                    @else
+                        <span class="text-gray-400 font-bold">Process is still running...</span>
+                    @endif
                 </div>
             </div>
         </div>

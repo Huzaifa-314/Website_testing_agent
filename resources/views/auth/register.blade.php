@@ -1,5 +1,33 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" x-data="{
+        password: '',
+        passwordStrength: 0,
+        passwordStrengthText: '',
+        passwordStrengthColor: '',
+        checkPasswordStrength() {
+            const pwd = this.password;
+            let strength = 0;
+            
+            if (pwd.length >= 8) strength++;
+            if (pwd.length >= 12) strength++;
+            if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength++;
+            if (/[0-9]/.test(pwd)) strength++;
+            if (/[^a-zA-Z0-9]/.test(pwd)) strength++;
+            
+            this.passwordStrength = strength;
+            
+            if (strength <= 1) {
+                this.passwordStrengthText = 'Weak';
+                this.passwordStrengthColor = 'bg-red-500';
+            } else if (strength <= 3) {
+                this.passwordStrengthText = 'Medium';
+                this.passwordStrengthColor = 'bg-yellow-500';
+            } else {
+                this.passwordStrengthText = 'Strong';
+                this.passwordStrengthColor = 'bg-green-500';
+            }
+        }
+    }">
         @csrf
 
         <!-- Name -->
@@ -14,16 +42,40 @@
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <p class="mt-1 text-sm text-gray-600">{{ __('You will receive an email verification link after registration.') }}</p>
         </div>
 
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <input id="password" 
+                   type="password"
+                   name="password"
+                   x-model="password"
+                   @input="checkPasswordStrength()"
+                   class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                   required 
+                   autocomplete="new-password" />
+
+            <!-- Password Strength Indicator -->
+            <div x-show="password.length > 0" class="mt-2">
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-300" 
+                             :class="passwordStrengthColor"
+                             :style="'width: ' + (passwordStrength * 20) + '%'"></div>
+                    </div>
+                    <span class="text-xs font-medium" :class="{
+                        'text-red-600': passwordStrength <= 1,
+                        'text-yellow-600': passwordStrength > 1 && passwordStrength <= 3,
+                        'text-green-600': passwordStrength > 3
+                    }" x-text="passwordStrengthText"></span>
+                </div>
+                <p class="text-xs text-gray-600">
+                    {{ __('Use at least 8 characters with a mix of letters, numbers, and symbols.') }}
+                </p>
+            </div>
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -32,11 +84,33 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <input id="password_confirmation" 
+                   type="password"
+                   name="password_confirmation" 
+                   class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                   required 
+                   autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Terms of Service -->
+        <div class="mt-4">
+            <label for="terms" class="inline-flex items-center">
+                <input id="terms" 
+                       type="checkbox" 
+                       name="terms" 
+                       value="1"
+                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" 
+                       required>
+                <span class="ms-2 text-sm text-gray-600">
+                    {{ __('I agree to the') }} 
+                    <a href="#" class="underline text-indigo-600 hover:text-indigo-900" target="_blank">{{ __('Terms of Service') }}</a>
+                    {{ __('and') }}
+                    <a href="#" class="underline text-indigo-600 hover:text-indigo-900" target="_blank">{{ __('Privacy Policy') }}</a>
+                </span>
+            </label>
+            <x-input-error :messages="$errors->get('terms')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">

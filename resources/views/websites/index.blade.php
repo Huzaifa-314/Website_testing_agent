@@ -29,19 +29,30 @@
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($websites as $website)
+                    @php
+                        $statusColors = [
+                            'active' => 'bg-green-100 text-green-800',
+                            'inactive' => 'bg-gray-100 text-gray-800',
+                            'pending' => 'bg-yellow-100 text-yellow-800',
+                            'error' => 'bg-red-100 text-red-800',
+                        ];
+                        $statusColor = $statusColors[$website->status] ?? 'bg-gray-100 text-gray-800';
+                    @endphp
                     <div class="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow rounded-xl border border-gray-100 flex flex-col h-full">
                         <div class="p-6 flex-grow">
                             <div class="flex justify-between items-start">
-                                <h3 class="text-lg font-bold text-gray-900 truncate" title="{{ $website->url }}">
+                                <h3 class="text-lg font-bold text-gray-900 truncate flex-1" title="{{ $website->url }}">
                                     {{ parse_url($website->url, PHP_URL_HOST) ?: $website->url }}
                                 </h3>
-                                <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-md">Active</span>
+                                <span class="px-2 py-1 text-xs font-semibold {{ $statusColor }} rounded-md ml-2 flex-shrink-0">
+                                    {{ ucfirst($website->status) }}
+                                </span>
                             </div>
                             <p class="text-sm text-gray-500 mt-1 truncate">{{ $website->url }}</p>
                             
                             <div class="mt-6 flex items-center justify-between text-sm text-gray-500">
-                                <span>{{ $website->testDefinitions->count() }} Tests</span>
-                                <span>{{ $website->reports->count() }} Reports</span>
+                                <span>{{ $website->test_definitions_count }} Tests</span>
+                                <span>{{ $website->reports_count }} Reports</span>
                             </div>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end">
