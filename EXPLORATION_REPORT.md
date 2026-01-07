@@ -470,3 +470,4 @@ With these improvements, Klydos could become a powerful and user-friendly QA tes
 - The test execution appears to be mocked/simulated rather than actual browser automation
 - AI test generation appears to be mocked rather than using actual AI services
 
+
