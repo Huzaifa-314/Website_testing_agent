@@ -37,6 +37,7 @@ class UpdateUserRequest extends FormRequest
             ],
             'password' => ['nullable', 'string', Password::defaults(), 'confirmed'],
             'role' => ['required', 'string', 'in:admin,user'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
     }
 }

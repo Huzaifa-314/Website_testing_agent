@@ -66,9 +66,6 @@
                                     </x-slot>
 
                                     <x-slot name="content">
-                                        <x-dropdown-link :href="route('dashboard')">
-                                            {{ __('Back to Dashboard') }}
-                                        </x-dropdown-link>
                                         <x-dropdown-link :href="route('profile.edit')">
                                             {{ __('Profile') }}
                                         </x-dropdown-link>
@@ -97,6 +94,7 @@
                 </div>
             </div>
         </div>
+        @stack('scripts')
     </body>
 </html>
 

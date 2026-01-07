@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -9,12 +10,56 @@ class WebsiteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $websites = request()->user()->websites()
-            ->withCount(['testDefinitions', 'reports'])
-            ->latest()
-            ->get();
+        $query = $request->user()->websites()
+            ->withCount(['testDefinitions', 'reports']);
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('url', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->get('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->get('date_to'));
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        // Validate sort_by to prevent SQL injection
+        $allowedSorts = ['created_at', 'updated_at', 'url', 'status'];
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+        
+        // Validate sort_order
+        $sortOrder = strtolower($sortOrder) === 'asc' ? 'asc' : 'desc';
+
+        // Handle special sorting cases
+        if ($sortBy === 'test_definitions_count') {
+            $query->orderBy('test_definitions_count', $sortOrder);
+        } elseif ($sortBy === 'reports_count') {
+            $query->orderBy('reports_count', $sortOrder);
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        $websites = $query->paginate(12)->withQueryString();
+
         return view('websites.index', compact('websites'));
     }
 
@@ -35,10 +80,18 @@ class WebsiteController extends Controller
             'url' => 'required|url|max:255',
         ]);
 
-        $request->user()->websites()->create([
+        $website = $request->user()->websites()->create([
             'url' => $validated['url'],
             'status' => 'pending',
         ]);
+
+        // Log website creation
+        ActivityLog::log(
+            $request->user()->id,
+            'create_website',
+            "Created website: {$website->url}",
+            ['website_id' => $website->id]
+        );
 
         return redirect()->route('websites.index')->with('success', 'Website added successfully.');
     }

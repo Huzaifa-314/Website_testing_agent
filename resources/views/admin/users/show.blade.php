@@ -38,6 +38,31 @@
                         </dd>
                     </div>
                     <div>
+                        <dt class="text-sm font-medium text-gray-500">Status</dt>
+                        <dd class="mt-1">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ ($user->is_active ?? true) ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ ($user->is_active ?? true) ? 'Active' : 'Inactive' }}
+                            </span>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Email Verification Status</dt>
+                        <dd class="mt-1">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->email_verified_at ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                {{ $user->email_verified_at ? 'Verified' : 'Unverified' }}
+                            </span>
+                            @if($user->email_verified_at)
+                                <span class="ml-2 text-xs text-gray-500">({{ $user->email_verified_at->format('M d, Y H:i') }})</span>
+                            @endif
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Last Login</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ $user->last_login_at ? $user->last_login_at->format('M d, Y H:i') . ' (' . $user->last_login_at->diffForHumans() . ')' : 'Never' }}
+                        </dd>
+                    </div>
+                    <div>
                         <dt class="text-sm font-medium text-gray-500">Created At</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $user->created_at->format('M d, Y H:i') }}</dd>
                     </div>
@@ -50,31 +75,30 @@
         </div>
 
         <!-- User Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="text-gray-500 text-sm">Total Websites</div>
-                <div class="font-bold text-2xl text-blue-600">{{ $user->websites->count() }}</div>
+                <div class="font-bold text-2xl text-blue-600">{{ $stats['websites_count'] }}</div>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="text-gray-500 text-sm">Total Test Definitions</div>
-                <div class="font-bold text-2xl text-green-600">
-                    {{ $user->websites->sum(fn($website) => $website->testDefinitions->count()) }}
-                </div>
+                <div class="font-bold text-2xl text-green-600">{{ $stats['test_definitions_count'] }}</div>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="text-gray-500 text-sm">Total Test Runs</div>
-                <div class="font-bold text-2xl text-purple-600">
-                    @php
-                        $totalRuns = 0;
-                        foreach ($user->websites as $website) {
-                            foreach ($website->testDefinitions as $testDef) {
-                                foreach ($testDef->testCases as $testCase) {
-                                    $totalRuns += $testCase->testRuns->count();
-                                }
-                            }
-                        }
-                    @endphp
-                    {{ $totalRuns }}
+                <div class="font-bold text-2xl text-purple-600">{{ $stats['test_runs_count'] }}</div>
+            </div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="text-gray-500 text-sm">Account Status</div>
+                <div class="mt-2">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $stats['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        {{ $stats['is_active'] ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+                <div class="mt-2">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $stats['email_verified'] ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                        Email {{ $stats['email_verified'] ? 'Verified' : 'Unverified' }}
+                    </span>
                 </div>
             </div>
         </div>

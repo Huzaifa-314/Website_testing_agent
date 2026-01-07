@@ -17,6 +17,113 @@
             </div>
         @endif
 
+        <!-- Search and Filter Section -->
+        <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <form method="GET" action="{{ route('websites.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Search Input -->
+                    <div class="md:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            id="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search by URL..."
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select 
+                            name="status" 
+                            id="status"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                            <option value="">All Statuses</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="error" {{ request('status') === 'error' ? 'selected' : '' }}>Error</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort By -->
+                    <div>
+                        <label for="sort_by" class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                        <select 
+                            name="sort_by" 
+                            id="sort_by"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                            <option value="created_at" {{ request('sort_by', 'created_at') === 'created_at' ? 'selected' : '' }}>Date Created</option>
+                            <option value="updated_at" {{ request('sort_by') === 'updated_at' ? 'selected' : '' }}>Last Updated</option>
+                            <option value="url" {{ request('sort_by') === 'url' ? 'selected' : '' }}>URL</option>
+                            <option value="status" {{ request('sort_by') === 'status' ? 'selected' : '' }}>Status</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Date From -->
+                    <div>
+                        <label for="date_from" class="block text-sm font-medium text-gray-700 mb-2">Date From</label>
+                        <input 
+                            type="date" 
+                            name="date_from" 
+                            id="date_from"
+                            value="{{ request('date_from') }}"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                    </div>
+
+                    <!-- Date To -->
+                    <div>
+                        <label for="date_to" class="block text-sm font-medium text-gray-700 mb-2">Date To</label>
+                        <input 
+                            type="date" 
+                            name="date_to" 
+                            id="date_to"
+                            value="{{ request('date_to') }}"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                    </div>
+
+                    <!-- Sort Order -->
+                    <div>
+                        <label for="sort_order" class="block text-sm font-medium text-gray-700 mb-2">Order</label>
+                        <select 
+                            name="sort_order" 
+                            id="sort_order"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                            <option value="desc" {{ request('sort_order', 'desc') === 'desc' ? 'selected' : '' }}>Descending</option>
+                            <option value="asc" {{ request('sort_order') === 'asc' ? 'selected' : '' }}>Ascending</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button 
+                        type="submit" 
+                        class="px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition ease-in-out duration-150"
+                    >
+                        Apply Filters
+                    </button>
+                    @if(request()->hasAny(['search', 'status', 'date_from', 'date_to', 'sort_by', 'sort_order']))
+                        <a 
+                            href="{{ route('websites.index') }}" 
+                            class="px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition ease-in-out duration-150"
+                        >
+                            Clear Filters
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
         @if($websites->isEmpty())
              <div class="flex flex-col items-center justify-center p-12 bg-white rounded-xl shadow-sm border border-gray-100 text-center">
                 <div class="bg-indigo-50 p-4 rounded-full mb-4">
@@ -63,6 +170,13 @@
                     </div>
                 @endforeach
             </div>
+
+            <!-- Pagination -->
+            @if($websites->hasPages())
+                <div class="mt-6">
+                    {{ $websites->links() }}
+                </div>
+            @endif
         @endif
     </div>
 </x-app-layout>

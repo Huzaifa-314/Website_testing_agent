@@ -40,7 +40,7 @@
                     </div>
 
                     <!-- Role -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <x-input-label for="role" :value="__('Role')" />
                         <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                             <option value="">Select Role</option>
@@ -48,6 +48,15 @@
                             <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
                         <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                    </div>
+
+                    <!-- Active Status -->
+                    <div class="mb-6">
+                        <div class="flex items-center">
+                            <input id="is_active" type="checkbox" name="is_active" value="1" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('is_active', true) ? 'checked' : '' }}>
+                            <x-input-label for="is_active" :value="__('Active Account')" class="ml-2" />
+                        </div>
+                        <x-input-error :messages="$errors->get('is_active')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center justify-end gap-4">

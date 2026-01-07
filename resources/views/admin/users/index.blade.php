@@ -59,7 +59,41 @@
                             Clear
                         </a>
                     @endif
+                    <a href="{{ route('admin.users.export', request()->query()) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                        Export CSV
+                    </a>
                 </form>
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div id="bulkActions" class="bg-white overflow-hidden shadow-sm sm:rounded-lg hidden">
+            <div class="p-4 flex items-center justify-between">
+                <span id="selectedCount" class="text-sm text-gray-700">0 users selected</span>
+                <div class="flex gap-2">
+                    <form id="bulkActivateForm" method="POST" action="{{ route('admin.users.bulk-activate') }}" class="inline">
+                        @csrf
+                        <input type="hidden" name="ids" id="bulkActivateIds">
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">Activate</button>
+                    </form>
+                    <form id="bulkDeactivateForm" method="POST" action="{{ route('admin.users.bulk-deactivate') }}" class="inline">
+                        @csrf
+                        <input type="hidden" name="ids" id="bulkDeactivateIds">
+                        <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm">Deactivate</button>
+                    </form>
+                    <select id="bulkRoleSelect" class="border-gray-300 rounded-md shadow-sm text-sm">
+                        <option value="">Change Role To...</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                    <button type="button" id="bulkChangeRoleBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Change Role</button>
+                    <form id="bulkDeleteForm" method="POST" action="{{ route('admin.users.bulk-delete') }}" class="inline" onsubmit="return confirm('Are you sure you want to delete the selected users?');">
+                        @csrf
+                        <input type="hidden" name="ids" id="bulkDeleteIds">
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">Delete</button>
+                    </form>
+                    <button type="button" id="clearSelection" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm">Clear Selection</button>
+                </div>
             </div>
         </div>
 
@@ -69,9 +103,15 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th class="px-6 py-3 text-left">
+                                <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email Verified</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -79,6 +119,9 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($users as $user)
                             <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="user-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" value="{{ $user->id }}" {{ $user->id === Auth::id() ? 'disabled' : '' }}>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
                                 </td>
@@ -89,6 +132,19 @@
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
                                         {{ ucfirst($user->role) }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ ($user->is_active ?? true) ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ ($user->is_active ?? true) ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->email_verified_at ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $user->email_verified_at ? 'Verified' : 'Unverified' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $user->created_at->format('M d, Y') }}
@@ -111,7 +167,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                                <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500">
                                     No users found.
                                 </td>
                             </tr>
@@ -128,6 +184,89 @@
             @endif
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.user-checkbox');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            const clearSelection = document.getElementById('clearSelection');
+            const bulkActivateForm = document.getElementById('bulkActivateForm');
+            const bulkDeactivateForm = document.getElementById('bulkDeactivateForm');
+            const bulkDeleteForm = document.getElementById('bulkDeleteForm');
+            const bulkChangeRoleBtn = document.getElementById('bulkChangeRoleBtn');
+            const bulkRoleSelect = document.getElementById('bulkRoleSelect');
+
+            function updateBulkActions() {
+                const selected = Array.from(checkboxes).filter(cb => cb.checked);
+                const count = selected.length;
+                
+                if (count > 0) {
+                    bulkActions.classList.remove('hidden');
+                    selectedCount.textContent = count + ' user(s) selected';
+                    
+                    const ids = selected.map(cb => cb.value);
+                    document.getElementById('bulkActivateIds').value = JSON.stringify(ids);
+                    document.getElementById('bulkDeactivateIds').value = JSON.stringify(ids);
+                    document.getElementById('bulkDeleteIds').value = JSON.stringify(ids);
+                } else {
+                    bulkActions.classList.add('hidden');
+                }
+            }
+
+            selectAll.addEventListener('change', function() {
+                checkboxes.forEach(cb => {
+                    if (!cb.disabled) {
+                        cb.checked = selectAll.checked;
+                    }
+                });
+                updateBulkActions();
+            });
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    updateBulkActions();
+                    selectAll.checked = Array.from(checkboxes).filter(c => !c.disabled).every(c => c.checked);
+                });
+            });
+
+            clearSelection.addEventListener('click', function() {
+                checkboxes.forEach(cb => cb.checked = false);
+                selectAll.checked = false;
+                updateBulkActions();
+            });
+
+            bulkChangeRoleBtn.addEventListener('click', function() {
+                const role = bulkRoleSelect.value;
+                if (!role) {
+                    alert('Please select a role');
+                    return;
+                }
+                
+                const selected = Array.from(checkboxes).filter(cb => cb.checked);
+                const ids = selected.map(cb => cb.value);
+                
+                if (ids.length === 0) {
+                    alert('Please select at least one user');
+                    return;
+                }
+
+                if (confirm(`Change role to ${role} for ${ids.length} user(s)?`)) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route("admin.users.bulk-change-role") }}';
+                    form.innerHTML = `
+                        @csrf
+                        <input type="hidden" name="ids" value="${JSON.stringify(ids)}">
+                        <input type="hidden" name="role" value="${role}">
+                    `;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    </script>
 </x-admin-layout>
 
 

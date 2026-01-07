@@ -17,16 +17,75 @@ class TestDefinitionController extends Controller
      */
     public function index(Request $request)
     {
-        $testDefinitions = TestDefinition::whereHas('website', function ($query) use ($request) {
-            $query->where('user_id', $request->user()->id);
+        $query = TestDefinition::whereHas('website', function ($q) use ($request) {
+            $q->where('user_id', $request->user()->id);
         })
         ->with(['website', 'testCases.testRuns' => function ($query) {
             $query->latest()->limit(1);
-        }])
-        ->latest()
-        ->paginate(15);
+        }]);
 
-        return view('test_definitions.index', compact('testDefinitions'));
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('test_scope', 'like', "%{$search}%")
+                  ->orWhereHas('website', function ($websiteQuery) use ($search) {
+                      $websiteQuery->where('url', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by website
+        if ($request->filled('website_id')) {
+            $query->where('website_id', $request->get('website_id'));
+        }
+
+        // Filter by test scope
+        if ($request->filled('test_scope')) {
+            $query->where('test_scope', $request->get('test_scope'));
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->get('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->get('date_to'));
+        }
+
+        // Filter by last run result
+        if ($request->filled('last_result')) {
+            $result = $request->get('last_result');
+            $query->whereHas('testCases', function ($q) use ($result) {
+                $q->whereHas('testRuns', function ($runQuery) use ($result) {
+                    $runQuery->where('result', $result)
+                             ->whereRaw('id IN (SELECT MAX(id) FROM test_runs WHERE test_case_id = test_cases.id GROUP BY test_case_id)');
+                });
+            });
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        // Validate sort_by to prevent SQL injection
+        $allowedSorts = ['created_at', 'updated_at', 'description', 'test_scope'];
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+        
+        // Validate sort_order
+        $sortOrder = strtolower($sortOrder) === 'asc' ? 'asc' : 'desc';
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        $testDefinitions = $query->paginate(15)->withQueryString();
+
+        // Get websites for filter dropdown
+        $websites = $request->user()->websites()->orderBy('url')->get();
+
+        return view('test_definitions.index', compact('testDefinitions', 'websites'));
     }
 
     /**

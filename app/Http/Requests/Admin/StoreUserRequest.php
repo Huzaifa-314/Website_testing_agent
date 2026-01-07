@@ -28,6 +28,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', Password::defaults(), 'confirmed'],
             'role' => ['required', 'string', 'in:admin,user'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
     }
 }

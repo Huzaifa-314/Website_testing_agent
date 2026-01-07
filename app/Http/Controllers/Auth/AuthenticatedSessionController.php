@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ActivityLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Update last login timestamp
+        $user = Auth::user();
+        $user->last_login_at = now();
+        $user->save();
+
+        // Log login activity
+        ActivityLog::log(
+            Auth::id(),
+            'login',
+            'User logged in successfully'
+        );
+
         return redirect()->intended(route('dashboard', absolute: false))->with('status', 'You have been logged in successfully.');
     }
 
@@ -36,11 +49,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $userId = Auth::id();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        // Log logout activity
+        if ($userId) {
+            ActivityLog::log(
+                $userId,
+                'logout',
+                'User logged out'
+            );
+        }
 
         return redirect('/');
     }
