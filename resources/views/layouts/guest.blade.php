@@ -17,7 +17,7 @@
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
-                <a href="/" class="flex items-center gap-3">
+                <a href="{{ url('/') }}" class="flex items-center gap-3">
                     <x-application-logo class="w-10 h-10" />
                     <span class="text-2xl font-bold tracking-tight text-gray-900">Klydos</span>
                 </a>
