@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
-                         <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Laravel') }} Logo" class="w-8 h-8">
                         <span class="font-bold text-xl tracking-tight text-gray-900">Klydos</span>
                     </a>
                 </div>
