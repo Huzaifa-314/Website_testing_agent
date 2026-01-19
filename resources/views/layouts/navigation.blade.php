@@ -13,22 +13,34 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::user()->isAdmin())
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
-                            {{ __('Admin Dashboard') }}
-                        </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('test-definitions.index')" :active="request()->routeIs('test-definitions.*')">
-                            {{ __('Test Definitions') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('reports.dashboard')" :active="request()->routeIs('reports.*')">
-                            {{ __('Reports') }}
-                        </x-nav-link>
-                    @endif
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                                {{ __('Admin Dashboard') }}
+                            </x-nav-link>
+                        @else
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('test-definitions.index')" :active="request()->routeIs('test-definitions.*')">
+                                {{ __('Test Definitions') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('reports.dashboard')" :active="request()->routeIs('reports.*')">
+                                {{ __('Reports') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
+            </div>
+
+            <!-- Middle Navigation Links -->
+            <div class="hidden sm:flex sm:items-center sm:gap-8">
+                <x-nav-link :href="route('pricing')" :active="request()->routeIs('pricing')">
+                    {{ __('Pricing') }}
+                </x-nav-link>
+                <x-nav-link :href="route('docs')" :active="request()->routeIs('docs')">
+                    {{ __('Docs') }}
+                </x-nav-link>
             </div>
 
             <!-- Settings Dropdown -->
@@ -80,46 +92,61 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-gray-100">
         <div class="pt-2 pb-3 space-y-1">
-            @if(Auth::user()->isAdmin())
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
-                    {{ __('Admin Dashboard') }}
-                </x-responsive-nav-link>
-            @else
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('test-definitions.index')" :active="request()->routeIs('test-definitions.*')">
-                    {{ __('Test Definitions') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('reports.dashboard')" :active="request()->routeIs('reports.*')">
-                    {{ __('Reports') }}
-                </x-responsive-nav-link>
-            @endif
+            @auth
+                @if(Auth::user()->isAdmin())
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                        {{ __('Admin Dashboard') }}
+                    </x-responsive-nav-link>
+                @else
+                    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('test-definitions.index')" :active="request()->routeIs('test-definitions.*')">
+                        {{ __('Test Definitions') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('reports.dashboard')" :active="request()->routeIs('reports.*')">
+                        {{ __('Reports') }}
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
+            <x-responsive-nav-link :href="route('pricing')" :active="request()->routeIs('pricing')">
+                {{ __('Pricing') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('docs')" :active="request()->routeIs('docs')">
+                {{ __('Docs') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+            @auth
+                <div class="px-4">
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('profile.edit')">
+                        {{ __('Profile') }}
                     </x-responsive-nav-link>
-                </form>
-            </div>
+
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-responsive-nav-link>
+                    </form>
+                </div>
+            @else
+                <div class="px-4 py-2 space-y-1">
+                    <x-responsive-nav-link :href="route('login')">{{ __('Log in') }}</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('register')">{{ __('Get Started') }}</x-responsive-nav-link>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>
