@@ -36,7 +36,7 @@
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-700 bg-gray-50 hover:bg-white border border-transparent hover:border-gray-100 rounded-full transition-all">
+                            <button class="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-pink-500 to-purple-500 border border-transparent rounded-full transition-all hover:shadow-md">
                                 {{ Auth::user()->name }}
                                 <svg class="fill-current h-4 w-4 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />

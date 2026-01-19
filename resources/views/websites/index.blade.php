@@ -4,7 +4,7 @@
             <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">My Websites</h1>
             <p class="text-gray-500 font-medium text-lg">Manage and monitor your connected digital assets.</p>
         </div>
-        <a href="{{ route('websites.create') }}" class="group relative px-8 py-4 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+        <a href="{{ route('websites.create') }}" class="group relative px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 hover:shadow-purple-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
             <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
             <div class="flex items-center gap-2 relative z-10">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
@@ -85,7 +85,7 @@
             </div>
 
             <div class="flex items-center gap-4 pt-6 border-t border-gray-50">
-                <button type="submit" class="px-10 py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all hover:shadow-xl active:scale-95">
+                <button type="submit" class="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl transition-all hover:shadow-xl active:scale-95 shadow-lg shadow-purple-200 hover:shadow-purple-300">
                     Filter Results
                 </button>
                 @if(request()->hasAny(['search', 'status', 'sort_by']))
@@ -106,7 +106,7 @@
                 </div>
                 <h3 class="text-3xl font-black text-gray-900 mb-4">Launch Your First Website</h3>
                 <p class="text-gray-500 font-medium mb-10 max-w-md mx-auto text-xl leading-relaxed">It looks like you haven't added any websites yet. Connect your first site to start the automated testing engine.</p>
-                <a href="{{ route('websites.create') }}" class="inline-flex items-center gap-3 px-10 py-5 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-200 active:scale-95">
+                <a href="{{ route('websites.create') }}" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black rounded-2xl hover:shadow-purple-300 transition-all shadow-2xl shadow-purple-200 active:scale-95">
                     <span>Connect Website Now</span>
                     <svg class="w-6 h-6 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
@@ -184,7 +184,7 @@
 
                     <div class="px-10 pb-10 mt-auto">
                         <div class="pt-8 border-t border-gray-50 flex items-center justify-between">
-                            <a href="{{ route('websites.show', $website) }}" class="group/btn inline-flex items-center gap-3 px-6 py-3 bg-indigo-50 text-indigo-600 font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300">
+                            <a href="{{ route('websites.show', $website) }}" class="group/btn inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl shadow-md shadow-purple-200 hover:shadow-lg hover:shadow-purple-300 transition-all duration-300 hover:-translate-y-0.5">
                                 View Console
                                 <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>

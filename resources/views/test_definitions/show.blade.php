@@ -17,7 +17,7 @@
             <form method="POST" action="{{ route('test-definitions.run', $testDefinition) }}" class="inline">
                 @csrf
                 <input type="hidden" name="async" value="1">
-                <button type="submit" class="group px-8 py-3 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:shadow-indigo-200 transition-all shadow-xl shadow-indigo-100 flex items-center gap-2">
+                <button type="submit" class="group px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:shadow-purple-200 transition-all shadow-xl shadow-purple-100 flex items-center gap-2">
                     <svg class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     <span>Run Test</span>
                 </button>

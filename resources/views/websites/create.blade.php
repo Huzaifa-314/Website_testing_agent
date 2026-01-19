@@ -47,7 +47,7 @@
                         <a href="{{ route('websites.index') }}" class="text-sm font-black text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest">
                             Cancel
                         </a>
-                        <button type="submit" class="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all hover:-translate-y-1 active:scale-95">
+                        <button type="submit" class="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black rounded-2xl shadow-xl shadow-purple-200 hover:shadow-purple-300 transition-all hover:-translate-y-1 active:scale-95">
                             Add New Website
                         </button>
                     </div>

@@ -60,7 +60,7 @@
                         
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Natural Language Processing Powered by Gemini</p>
-                            <button type="button" id="preview-btn" class="group px-8 py-3 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-indigo-200 transition-all shadow-xl shadow-indigo-100 active:scale-95 flex items-center gap-2">
+                            <button type="button" id="preview-btn" class="group px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-purple-200 transition-all shadow-xl shadow-purple-100 active:scale-95 flex items-center gap-2">
                                 <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                 <span>Generate Steps</span>
                             </button>
@@ -100,7 +100,7 @@
 
                     <div class="flex items-center justify-end gap-6 pt-6 border-t border-gray-50">
                         <a href="{{ route('test-definitions.index') }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-900 transition-colors">Discard</a>
-                        <button type="submit" id="save-btn" disabled class="px-10 py-4 bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:scale-105 transition-all shadow-xl shadow-gray-200 disabled:opacity-30 disabled:cursor-not-allowed">
+                        <button type="submit" id="save-btn" disabled class="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:scale-105 transition-all shadow-xl shadow-purple-200 hover:shadow-purple-300 disabled:opacity-30 disabled:cursor-not-allowed">
                             Save Definition
                         </button>
                     </div>

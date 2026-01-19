@@ -7,7 +7,7 @@
             <p class="text-lg text-gray-500 font-medium">Define, automate, and monitor your quality assurance tests.</p>
         </div>
         <div class="flex items-center gap-4">
-            <a href="{{ route('test-definitions.create') }}" class="group relative px-8 py-4 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+            <a href="{{ route('test-definitions.create') }}" class="group relative px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 hover:shadow-purple-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
                 <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <div class="flex items-center gap-2 relative z-10">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
@@ -89,7 +89,7 @@
                             Clear All
                         </a>
                     @endif
-                    <button type="submit" class="px-10 py-4 bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-xl shadow-gray-200">
+                    <button type="submit" class="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-xl shadow-purple-200 hover:shadow-purple-300">
                         Apply Filters
                     </button>
                 </div>
@@ -105,7 +105,7 @@
             </div>
             <h3 class="text-3xl font-black text-gray-900 mb-4">No Tests Found</h3>
             <p class="text-gray-500 font-medium mb-10 max-w-sm mx-auto text-lg">Start your automation journey by creating your first test definition.</p>
-            <a href="{{ route('websites.index') }}" class="inline-flex items-center gap-3 px-10 py-5 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-200 hover:-translate-y-1">
+            <a href="{{ route('websites.index') }}" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl hover:shadow-purple-300 transition-all shadow-2xl shadow-purple-200 hover:-translate-y-1">
                 <span>Configure Websites</span>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
