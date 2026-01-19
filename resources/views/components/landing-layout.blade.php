@@ -110,38 +110,7 @@
         <div class="gradient-orb bg-purple-500 w-96 h-96 top-1/2 -right-48" style="animation-delay: 2s;"></div>
         <div class="gradient-orb bg-indigo-500 w-96 h-96 bottom-0 left-1/3" style="animation-delay: 4s;"></div>
         
-        <!-- Navigation -->
-        <nav class="relative z-50 w-full glass-effect border-b border-gray-100/50">
-            <div class="w-full max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-6">
-                <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.svg') }}" alt="Klydos Logo" class="w-10 h-10">
-                    <a href="/" class="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Klydos</a>
-                </div>
-
-                <!-- Middle Links -->
-                <div class="hidden md:flex items-center gap-10">
-                    <a href="{{ route('pricing') }}" class="{{ request()->routeIs('pricing') ? 'font-bold text-purple-600' : 'font-semibold text-gray-700 hover:text-purple-600' }} transition-colors text-sm uppercase tracking-wider">Pricing</a>
-                    <a href="{{ route('docs') }}" class="{{ request()->routeIs('docs') ? 'font-bold text-purple-600' : 'font-semibold text-gray-700 hover:text-purple-600' }} transition-colors text-sm uppercase tracking-wider">Docs</a>
-                </div>
-
-                <!-- Right Side -->
-                <div class="flex items-center gap-6">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-700 hover:text-purple-600 transition-colors">Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="font-semibold text-gray-700 hover:text-purple-600 transition-colors">Log in</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-5 py-2.5 gradient-button text-white rounded-xl font-semibold shadow-lg">
-                                    Get Started
-                                </a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </nav>
+        @include('layouts.navigation')
 
         <main class="relative z-10 flex-grow">
             {{ $slot }}
