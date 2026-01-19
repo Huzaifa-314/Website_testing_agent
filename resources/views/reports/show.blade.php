@@ -40,7 +40,7 @@
                         </li>
                     </ol>
                 </nav>
-                <h2 class="font-bold text-2xl text-gray-900 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                <h2 class="text-4xl font-black text-gray-900 tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">
                     {{ __('Execution Details') }}
                 </h2>
             </div>
@@ -70,7 +70,7 @@
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                              <h3 class="text-xl font-bold text-gray-900">{{ $testRun->testCase->testDefinition->description }}</h3>
-                             <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide {{ $testRun->result == 'pass' ? 'bg-green-100 text-green-700 border border-green-200' : ($testRun->result == 'fail' || $testRun->result == 'error' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-gray-100 text-gray-700 border border-gray-200') }}">
+                             <span class="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-widest {{ $testRun->result == 'pass' ? 'bg-emerald-50/80 text-emerald-600 border border-emerald-200' : ($testRun->result == 'fail' || $testRun->result == 'error' ? 'bg-red-50/80 text-red-600 border border-red-200' : 'bg-gray-100 text-gray-700 border border-gray-200') }}">
                                 {{ $testRun->result ?? 'PENDING' }}
                             </span>
                         </div>

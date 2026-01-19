@@ -1,7 +1,7 @@
 <x-dashboard-layout>
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-3xl font-black text-gray-900 tracking-tight">Reports & Analytics</h1>
+            <h1 class="text-4xl font-black tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">Reports & Analytics</h1>
             <p class="text-gray-500 font-medium">Analyze your test results and performance trends.</p>
         </div>
     </div>
@@ -24,9 +24,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Success Rate</p>
-                    <p class="text-3xl font-black text-green-600 mt-1">{{ $successRate }}%</p>
+                    <p class="text-3xl font-black text-emerald-600 mt-1">{{ $successRate }}%</p>
                 </div>
-                <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600">
+                <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
             </div>
@@ -36,9 +36,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Passed</p>
-                    <p class="text-3xl font-black text-green-600 mt-1">{{ number_format($passedTests) }}</p>
+                    <p class="text-3xl font-black text-emerald-600 mt-1">{{ number_format($passedTests) }}</p>
                 </div>
-                <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600">
+                <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                             <div class="flex items-center gap-6 min-w-0">
                                 <div class="flex-shrink-0">
                                     @if($run->result == 'pass')
-                                        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
+                                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
                                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                         </div>
                                     @elseif($run->result == 'fail')
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-6 flex-shrink-0">
-                                <div class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] {{ $run->result == 'pass' ? 'bg-green-50 text-green-600' : ($run->result == 'fail' ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-600') }}">
+                                <div class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] {{ $run->result == 'pass' ? 'bg-emerald-50 text-emerald-600' : ($run->result == 'fail' ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-600') }}">
                                     {{ $run->result ?? 'PENDING' }}
                                 </div>
                                 <a href="{{ route('reports.show', $run) }}" class="p-3 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-indigo-600 hover:border-indigo-100 hover:shadow-lg transition-all">

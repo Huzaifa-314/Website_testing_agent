@@ -1,16 +1,16 @@
 <x-dashboard-layout>
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-3">Welcome back, {{ Auth::user()->name }}!</h1>
+            <h1 class="text-4xl font-black tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">Welcome back, {{ Auth::user()->name }}!</h1>
             <p class="text-lg text-gray-500 font-medium">Your testing agent is ready to assist you.</p>
         </div>
         <div class="flex items-center gap-4">
             <div class="px-6 py-4 rounded-2xl bg-white border border-gray-100 flex items-center gap-4 shadow-sm">
-                <div class="bg-green-100 p-2 rounded-lg">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <div class="bg-emerald-100 p-2 rounded-lg">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Agent Status</div>
+                    <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Agent Status</div>
                     <div class="text-sm font-bold text-gray-900">Online & Ready</div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
             @forelse($recentRuns as $run)
                 <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $run->result == 'pass' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $run->result == 'pass' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600' }}">
                             {{ $run->result ?? 'Running' }}
                         </span>
                         <span class="text-xs text-gray-400 font-medium">{{ $run->created_at->diffForHumans() }}</span>

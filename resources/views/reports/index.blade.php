@@ -30,7 +30,7 @@
                         </li>
                     </ol>
                 </nav>
-                <h2 class="font-bold text-2xl text-gray-900 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                <h2 class="text-4xl font-black text-gray-900 tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">
                     {{ __('Execution History') }}
                 </h2>
             </div>
@@ -103,7 +103,7 @@
                                                                         {{ $definition->description }}
                                                                     </a>
                                                                 </h4>
-                                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide {{ $run->result == 'pass' ? 'bg-green-50 text-green-700 border border-green-100' : ($run->result == 'fail' || $run->result == 'error' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-gray-50 text-gray-600 border border-gray-100') }}">
+                                                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest {{ $run->result == 'pass' ? 'bg-emerald-50/80 text-emerald-600 border border-emerald-100/50' : ($run->result == 'fail' || $run->result == 'error' ? 'bg-red-50/80 text-red-600 border border-red-100/50' : 'bg-gray-50 text-gray-600 border border-gray-100') }}">
                                                                     {{ $run->result ?? 'Running' }}
                                                                 </span>
                                                             </div>
