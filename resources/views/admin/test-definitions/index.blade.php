@@ -53,18 +53,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div>
-                        <select name="test_scope" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                            <option value="">All Scopes</option>
-                            @foreach(['functional', 'performance', 'security', 'usability', 'compatibility'] as $scope)
-                                <option value="{{ $scope }}" {{ request('test_scope') === $scope ? 'selected' : '' }}>
-                                    {{ ucfirst($scope) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
                     <x-primary-button type="submit">Filter</x-primary-button>
-                    @if(request('search') || request('website_id') || request('test_scope'))
+                    @if(request('search') || request('website_id'))
                         <a href="{{ route('admin.test-definitions.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
                             Clear
                         </a>
@@ -96,7 +86,6 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Website</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test Scope</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test Cases</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -120,9 +109,6 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-500">{{ $testDefinition->website->user->name }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $testDefinition->test_scope }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $testDefinition->testCases->count() }}

@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('not.admin')->group(function () {
         Route::resource('websites', \App\Http\Controllers\WebsiteController::class);
         Route::resource('test-definitions', \App\Http\Controllers\TestDefinitionController::class);
+        Route::post('/test-definitions/preview', [\App\Http\Controllers\TestDefinitionController::class, 'preview'])->name('test-definitions.preview');
         Route::post('/test-definitions/{testDefinition}/run', [\App\Http\Controllers\TestDefinitionController::class, 'run'])->name('test-definitions.run');
         Route::get('/test-definitions/{testDefinition}/execute/{testRun}', [\App\Http\Controllers\TestDefinitionController::class, 'execute'])->name('test-definitions.execute');
         Route::get('/test-definitions/{testDefinition}/progress/{testRun}', [\App\Http\Controllers\TestDefinitionController::class, 'progress'])->name('test-definitions.progress');

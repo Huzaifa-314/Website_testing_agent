@@ -17,7 +17,6 @@ class TestDefinitionTemplateSeeder extends Seeder
             [
                 'name' => 'Login Authentication Test',
                 'description' => 'Test user login functionality with valid credentials',
-                'test_scope' => 'auth',
                 'example_description' => 'Go to login page, enter valid email and password, click login button, and verify redirect to dashboard',
                 'example_steps' => [
                     ['action' => 'visit', 'url' => '/login'],
@@ -31,7 +30,6 @@ class TestDefinitionTemplateSeeder extends Seeder
             [
                 'name' => 'Contact Form Submission',
                 'description' => 'Test contact form submission and success message',
-                'test_scope' => 'form',
                 'example_description' => 'Navigate to contact page, fill in name and message fields, submit form, and verify success message appears',
                 'example_steps' => [
                     ['action' => 'visit', 'url' => '/contact'],
@@ -45,7 +43,6 @@ class TestDefinitionTemplateSeeder extends Seeder
             [
                 'name' => 'Homepage Load Test',
                 'description' => 'Verify homepage loads correctly',
-                'test_scope' => 'workflow',
                 'example_description' => 'Visit homepage and verify page loads with status code 200',
                 'example_steps' => [
                     ['action' => 'visit', 'url' => '/'],
@@ -56,7 +53,6 @@ class TestDefinitionTemplateSeeder extends Seeder
             [
                 'name' => 'User Registration Flow',
                 'description' => 'Test complete user registration process',
-                'test_scope' => 'workflow',
                 'example_description' => 'Go to registration page, fill in all required fields, submit form, and verify account creation',
                 'example_steps' => [
                     ['action' => 'visit', 'url' => '/register'],
@@ -72,7 +68,6 @@ class TestDefinitionTemplateSeeder extends Seeder
             [
                 'name' => 'API Endpoint Test',
                 'description' => 'Test API endpoint response',
-                'test_scope' => 'api',
                 'example_description' => 'Make GET request to API endpoint and verify response status and data structure',
                 'example_steps' => [
                     ['action' => 'visit', 'url' => '/api/users'],

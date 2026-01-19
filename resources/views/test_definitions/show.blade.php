@@ -57,14 +57,6 @@
                         <dd class="mt-1 text-sm text-gray-900">{{ $testDefinition->description }}</dd>
                     </div>
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Test Scope</dt>
-                        <dd class="mt-1">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {{ ucfirst($testDefinition->test_scope) }}
-                            </span>
-                        </dd>
-                    </div>
-                    <div>
                         <dt class="text-sm font-medium text-gray-500">Website</dt>
                         <dd class="mt-1">
                             <a href="{{ route('websites.show', $testDefinition->website) }}" class="text-indigo-600 hover:text-indigo-800">
@@ -93,8 +85,12 @@
             @foreach($testDefinition->testCases as $testCase)
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-gray-100">
                     <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-                        <h3 class="text-lg font-bold text-gray-900">Test Steps</h3>
-                        <p class="text-sm text-gray-500 mt-1">Generated test execution steps</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">Test Steps</h3>
+                                <p class="text-sm text-gray-500 mt-1">Generated test execution steps</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         @if(!empty($testCase->steps))

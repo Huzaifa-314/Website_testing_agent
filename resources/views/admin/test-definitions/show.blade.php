@@ -29,10 +29,6 @@
                         <dd class="mt-1 text-sm text-gray-900">{{ $testDefinition->description }}</dd>
                     </div>
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Test Scope</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $testDefinition->test_scope }}</dd>
-                    </div>
-                    <div>
                         <dt class="text-sm font-medium text-gray-500">Website</dt>
                         <dd class="mt-1 text-sm text-gray-900">
                             <a href="{{ route('admin.websites.show', $testDefinition->website) }}" class="text-indigo-600 hover:text-indigo-900">

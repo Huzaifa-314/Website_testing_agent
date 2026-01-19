@@ -38,7 +38,7 @@
                                             </div>
                                             <div>
                                                 <h4 class="text-sm font-bold text-gray-900">{{ $definition->description }}</h4>
-                                                <p class="text-xs text-gray-500">{{ $definition->test_scope }} &bull; Executed {{ $run->executed_at->diffForHumans() }}</p>
+                                                <p class="text-xs text-gray-500">Executed {{ $run->executed_at->diffForHumans() }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center gap-4">

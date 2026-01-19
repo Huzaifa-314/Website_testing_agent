@@ -855,7 +855,6 @@ class AdminController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('test_scope', 'like', "%{$search}%")
                   ->orWhereHas('website', function ($websiteQuery) use ($search) {
                       $websiteQuery->where('url', 'like', "%{$search}%")
                                    ->orWhereHas('user', function ($userQuery) use ($search) {
@@ -869,11 +868,6 @@ class AdminController extends Controller
         // Filter by website
         if ($request->has('website_id') && $request->website_id) {
             $query->where('website_id', $request->website_id);
-        }
-
-        // Filter by test scope
-        if ($request->has('test_scope') && $request->test_scope) {
-            $query->where('test_scope', $request->test_scope);
         }
 
         $testDefinitions = $query->orderBy('created_at', 'desc')->paginate(15);

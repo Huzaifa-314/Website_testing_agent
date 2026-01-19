@@ -25,7 +25,6 @@ class TestDefinitionSeeder extends Seeder
                 [
                     'website_id' => $website->id,
                     'description' => 'Test user login functionality with valid credentials',
-                    'test_scope' => 'auth',
                 ]
             );
 
@@ -38,7 +37,6 @@ class TestDefinitionSeeder extends Seeder
                 [
                     'website_id' => $website->id,
                     'description' => 'Verify homepage loads correctly with status code 200',
-                    'test_scope' => 'workflow',
                 ]
             );
 
@@ -51,7 +49,6 @@ class TestDefinitionSeeder extends Seeder
                 [
                     'website_id' => $website->id,
                     'description' => 'Test contact form submission and success message',
-                    'test_scope' => 'form',
                 ]
             );
         }

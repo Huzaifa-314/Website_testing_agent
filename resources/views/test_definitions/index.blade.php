@@ -56,22 +56,6 @@
                         </select>
                     </div>
 
-                    <!-- Test Scope Filter -->
-                    <div>
-                        <label for="test_scope" class="block text-sm font-medium text-gray-700 mb-2">Test Scope</label>
-                        <select 
-                            name="test_scope" 
-                            id="test_scope"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        >
-                            <option value="">All Scopes</option>
-                            <option value="smoke" {{ request('test_scope') === 'smoke' ? 'selected' : '' }}>Smoke</option>
-                            <option value="regression" {{ request('test_scope') === 'regression' ? 'selected' : '' }}>Regression</option>
-                            <option value="integration" {{ request('test_scope') === 'integration' ? 'selected' : '' }}>Integration</option>
-                            <option value="e2e" {{ request('test_scope') === 'e2e' ? 'selected' : '' }}>E2E</option>
-                            <option value="performance" {{ request('test_scope') === 'performance' ? 'selected' : '' }}>Performance</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -124,7 +108,6 @@
                             <option value="created_at" {{ request('sort_by', 'created_at') === 'created_at' ? 'selected' : '' }}>Date Created</option>
                             <option value="updated_at" {{ request('sort_by') === 'updated_at' ? 'selected' : '' }}>Last Updated</option>
                             <option value="description" {{ request('sort_by') === 'description' ? 'selected' : '' }}>Description</option>
-                            <option value="test_scope" {{ request('sort_by') === 'test_scope' ? 'selected' : '' }}>Test Scope</option>
                         </select>
                     </div>
 
@@ -149,7 +132,7 @@
                     >
                         Apply Filters
                     </button>
-                    @if(request()->hasAny(['search', 'website_id', 'test_scope', 'date_from', 'date_to', 'last_result', 'sort_by', 'sort_order']))
+                    @if(request()->hasAny(['search', 'website_id', 'date_from', 'date_to', 'last_result', 'sort_by', 'sort_order']))
                         <a 
                             href="{{ route('test-definitions.index') }}" 
                             class="px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition ease-in-out duration-150"
@@ -190,9 +173,6 @@
                                 <div class="flex-grow">
                                     <div class="flex items-center gap-3 mb-2">
                                         <h4 class="text-lg font-semibold text-gray-900">{{ $testDefinition->description }}</h4>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ ucfirst($testDefinition->test_scope) }}
-                                        </span>
                                     </div>
                                     
                                     <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">

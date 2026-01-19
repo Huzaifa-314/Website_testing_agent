@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestDefinition extends Model
 {
-    protected $fillable = ['website_id', 'description', 'test_scope'];
+    protected $fillable = ['website_id', 'description'];
 
     public function website(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

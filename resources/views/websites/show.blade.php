@@ -212,9 +212,6 @@
                                 <div class="flex-grow">
                                     <h4 class="text-lg font-semibold text-gray-900">{{ $test->description }}</h4>
                                     <div class="mt-1 flex items-center gap-4 text-sm text-gray-500">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ $test->test_scope }}
-                                        </span>
                                         <span>Created {{ $test->created_at->diffForHumans() }}</span>
                                     </div>
                                     <p class="mt-2 text-sm text-gray-600 max-w-2xl bg-gray-50 p-2 rounded border border-gray-100 font-mono">

@@ -9,7 +9,6 @@ class TestDefinitionTemplate extends Model
     protected $fillable = [
         'name',
         'description',
-        'test_scope',
         'example_description',
         'example_steps',
         'is_system',

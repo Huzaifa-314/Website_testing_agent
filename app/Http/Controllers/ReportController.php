@@ -111,7 +111,6 @@ class ReportController extends Controller
         $data = [
             'id' => $testRun->id,
             'test_definition' => $testRun->testCase->testDefinition->description,
-            'test_scope' => $testRun->testCase->testDefinition->test_scope,
             'website' => $testRun->testCase->testDefinition->website->url,
             'status' => $testRun->status,
             'result' => $testRun->result,
@@ -151,7 +150,6 @@ class ReportController extends Controller
             // Data rows
             fputcsv($file, ['ID', $testRun->id]);
             fputcsv($file, ['Test Definition', $testRun->testCase->testDefinition->description]);
-            fputcsv($file, ['Test Scope', $testRun->testCase->testDefinition->test_scope]);
             fputcsv($file, ['Website', $testRun->testCase->testDefinition->website->url]);
             fputcsv($file, ['Status', $testRun->status]);
             fputcsv($file, ['Result', $testRun->result ?? 'Pending']);

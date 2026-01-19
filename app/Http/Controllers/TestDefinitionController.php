@@ -8,7 +8,7 @@ use App\Models\Website;
 use App\Models\TestDefinition;
 use App\Models\TestDefinitionTemplate;
 
-use App\Services\MockAiTestGenerator;
+use App\Services\AiTestGenerator;
 
 class TestDefinitionController extends Controller
 {
@@ -29,7 +29,6 @@ class TestDefinitionController extends Controller
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('test_scope', 'like', "%{$search}%")
                   ->orWhereHas('website', function ($websiteQuery) use ($search) {
                       $websiteQuery->where('url', 'like', "%{$search}%");
                   });
@@ -39,11 +38,6 @@ class TestDefinitionController extends Controller
         // Filter by website
         if ($request->filled('website_id')) {
             $query->where('website_id', $request->get('website_id'));
-        }
-
-        // Filter by test scope
-        if ($request->filled('test_scope')) {
-            $query->where('test_scope', $request->get('test_scope'));
         }
 
         // Filter by date range
@@ -70,7 +64,7 @@ class TestDefinitionController extends Controller
         $sortOrder = $request->get('sort_order', 'desc');
         
         // Validate sort_by to prevent SQL injection
-        $allowedSorts = ['created_at', 'updated_at', 'description', 'test_scope'];
+        $allowedSorts = ['created_at', 'updated_at', 'description'];
         if (!in_array($sortBy, $allowedSorts)) {
             $sortBy = 'created_at';
         }
@@ -119,12 +113,13 @@ class TestDefinitionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MockAiTestGenerator $generator)
+    public function store(Request $request, AiTestGenerator $generator)
     {
         $validated = $request->validate([
             'website_id' => 'required|exists:websites,id',
             'description' => 'required|string',
-            'test_scope' => 'required|string',
+            'generated_steps' => 'required|string',
+            'generated_metadata' => 'nullable|string',
             'execute_immediately' => 'sometimes|boolean',
         ]);
 
@@ -136,19 +131,40 @@ class TestDefinitionController extends Controller
 
         $definition = $website->testDefinitions()->create([
             'description' => $validated['description'],
-            'test_scope' => $validated['test_scope'],
         ]);
 
-        // Mock AI Generation
-        $steps = $generator->generate($definition->description, $definition->test_scope);
+        // Use pre-generated steps from preview
+        try {
+            $steps = json_decode($validated['generated_steps'], true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($steps) || empty($steps)) {
+                throw new \Exception('Invalid generated steps. Please regenerate the steps.');
+            }
 
-        $definition->testCases()->create([
-            'steps' => $steps,
-            'status' => 'generated',
-            'expected_result' => 'Operation successful',
-        ]);
+            // Parse metadata if provided
+            $metadata = [];
+            if (!empty($validated['generated_metadata'])) {
+                $metadata = json_decode($validated['generated_metadata'], true);
+            }
 
-        $message = 'Test definition saved and mock test case generated.';
+            // Steps were generated via Gemini in the preview
+            $definition->testCases()->create([
+                'steps' => $steps,
+                'status' => 'generated',
+                'expected_result' => 'Operation successful',
+                'generation_source' => $metadata['generation_source'] ?? 'gemini',
+                'gemini_model' => $metadata['gemini_model'] ?? null,
+            ]);
+
+            $message = 'Test definition saved and test case generated.';
+        } catch (\Exception $e) {
+            // Delete the definition if generation failed
+            $definition->delete();
+            
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['description' => $e->getMessage()]);
+        }
         
         // Execute immediately if requested
         if ($request->has('execute_immediately') && $request->boolean('execute_immediately')) {
@@ -207,7 +223,7 @@ class TestDefinitionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TestDefinition $testDefinition, MockAiTestGenerator $generator)
+    public function update(Request $request, TestDefinition $testDefinition, AiTestGenerator $generator)
     {
         if ($testDefinition->website->user_id !== $request->user()->id) {
             abort(403);
@@ -216,8 +232,8 @@ class TestDefinitionController extends Controller
         $validated = $request->validate([
             'website_id' => 'required|exists:websites,id',
             'description' => 'required|string',
-            'test_scope' => 'required|string',
-            'regenerate_steps' => 'sometimes|boolean',
+            'generated_steps' => 'nullable|string',
+            'generated_metadata' => 'nullable|string',
         ]);
 
         $website = Website::findOrFail($validated['website_id']);
@@ -229,26 +245,45 @@ class TestDefinitionController extends Controller
         $testDefinition->update([
             'website_id' => $validated['website_id'],
             'description' => $validated['description'],
-            'test_scope' => $validated['test_scope'],
         ]);
 
-        // Regenerate steps if requested
-        if ($request->has('regenerate_steps') && $request->boolean('regenerate_steps')) {
-            $steps = $generator->generate($testDefinition->description, $testDefinition->test_scope);
-            
-            // Update or create test case
-            $testCase = $testDefinition->testCases()->first();
-            if ($testCase) {
-                $testCase->update([
-                    'steps' => $steps,
-                    'status' => 'generated',
-                ]);
-            } else {
-                $testDefinition->testCases()->create([
-                    'steps' => $steps,
-                    'status' => 'generated',
-                    'expected_result' => 'Operation successful',
-                ]);
+        // Update steps if new steps were generated
+        if (!empty($validated['generated_steps'])) {
+            try {
+                $steps = json_decode($validated['generated_steps'], true);
+                
+                if (json_last_error() !== JSON_ERROR_NONE || !is_array($steps) || empty($steps)) {
+                    throw new \Exception('Invalid generated steps. Please regenerate the steps.');
+                }
+
+                // Parse metadata if provided
+                $metadata = [];
+                if (!empty($validated['generated_metadata'])) {
+                    $metadata = json_decode($validated['generated_metadata'], true);
+                }
+
+                // Update or create test case
+                $testCase = $testDefinition->testCases()->first();
+                if ($testCase) {
+                    $testCase->update([
+                        'steps' => $steps,
+                        'status' => 'generated',
+                        'generation_source' => $metadata['generation_source'] ?? 'gemini',
+                        'gemini_model' => $metadata['gemini_model'] ?? null,
+                    ]);
+                } else {
+                    $testDefinition->testCases()->create([
+                        'steps' => $steps,
+                        'status' => 'generated',
+                        'expected_result' => 'Operation successful',
+                        'generation_source' => $metadata['generation_source'] ?? 'gemini',
+                        'gemini_model' => $metadata['gemini_model'] ?? null,
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['description' => $e->getMessage()]);
             }
         }
 
@@ -463,5 +498,43 @@ class TestDefinitionController extends Controller
             'total_test_cases' => count($testCases),
             'completed_test_cases' => count(array_filter($allTestRuns, fn($tr) => $tr['status'] === 'completed')),
         ]);
+    }
+
+    /**
+     * Preview test steps generated from description (for AJAX preview)
+     */
+    public function preview(Request $request, AiTestGenerator $generator)
+    {
+        $request->validate([
+            'description' => 'required|string|min:10',
+            'website_id' => 'nullable|exists:websites,id',
+        ]);
+
+        $description = $request->input('description');
+        $websiteId = $request->input('website_id');
+        $websiteUrl = null;
+
+        // Get website URL if provided
+        if ($websiteId) {
+            $website = Website::find($websiteId);
+            if ($website && $website->user_id === $request->user()->id) {
+                $websiteUrl = $website->url;
+            }
+        }
+
+        try {
+            $generationResult = $generator->generate($description, $websiteUrl);
+            
+            return response()->json([
+                'success' => true,
+                'steps' => $generationResult['steps'],
+                'metadata' => $generationResult['metadata'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

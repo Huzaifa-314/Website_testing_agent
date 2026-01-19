@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestCase extends Model
 {
-    protected $fillable = ['test_definition_id', 'steps', 'expected_result', 'status'];
+    protected $fillable = ['test_definition_id', 'steps', 'expected_result', 'status', 'generation_source', 'gemini_model'];
 
     protected $casts = [
         'steps' => 'array',

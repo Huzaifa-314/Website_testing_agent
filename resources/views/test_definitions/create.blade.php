@@ -26,8 +26,7 @@
                             @foreach($templates as $template)
                                 <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-300 hover:shadow-md transition cursor-pointer template-card" 
                                      data-template-id="{{ $template->id }}"
-                                     data-description="{{ $template->example_description ?? $template->description }}"
-                                     data-scope="{{ $template->test_scope }}">
+                                     data-description="{{ $template->example_description ?? $template->description }}">
                                     <div class="flex items-start justify-between mb-2">
                                         <h4 class="font-semibold text-gray-900">{{ $template->name }}</h4>
                                         @if($template->is_system)
@@ -36,7 +35,6 @@
                                     </div>
                                     <p class="text-sm text-gray-600 mb-2">{{ $template->description }}</p>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">{{ ucfirst($template->test_scope) }}</span>
                                         <button type="button" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium use-template-btn">
                                             Use Template
                                         </button>
@@ -78,20 +76,18 @@
                             <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Go to login page, enter valid credentials, and verify dashboard loads." required>{{ old('description') }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                             <p class="mt-1 text-sm text-gray-500">Describe what you want to test in plain English.</p>
+                            
+                            <!-- Generate Steps Button -->
+                            <div class="mt-4">
+                                <button type="button" id="preview-btn" class="px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-widest hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                    Generate Steps
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Scope -->
-                        <div class="mb-6">
-                            <x-input-label for="test_scope" :value="__('Test Scope')" />
-                            <select id="test_scope" name="test_scope" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                <option value="">-- Select test scope --</option>
-                                <option value="form" {{ old('test_scope') == 'form' ? 'selected' : '' }}>Form Submission</option>
-                                <option value="auth" {{ old('test_scope') == 'auth' ? 'selected' : '' }}>Authentication</option>
-                                <option value="api" {{ old('test_scope') == 'api' ? 'selected' : '' }}>API Endpoint</option>
-                                <option value="workflow" {{ old('test_scope') == 'workflow' ? 'selected' : '' }}>End-to-End Workflow</option>
-                            </select>
-                            <x-input-error :messages="$errors->get('test_scope')" class="mt-2" />
-                        </div>
+                        <!-- Hidden fields to store generated steps and metadata -->
+                        <input type="hidden" id="generated-steps" name="generated_steps" value="">
+                        <input type="hidden" id="generated-metadata" name="generated_metadata" value="">
 
                         <!-- Preview Section -->
                         <div id="preview-section" class="mb-6 hidden">
@@ -101,7 +97,7 @@
                                     <!-- Preview will be generated here -->
                                 </div>
                                 <button type="button" id="regenerate-preview" class="mt-3 text-sm text-indigo-600 hover:text-indigo-800 font-medium">
-                                    Regenerate Preview
+                                    Regenerate Steps
                                 </button>
                             </div>
                         </div>
@@ -118,10 +114,7 @@
 
                         <div class="flex items-center justify-end gap-4 mt-6">
                             <a href="{{ route('test-definitions.index') }}" class="text-gray-600 hover:text-gray-900 underline">Cancel</a>
-                            <button type="button" id="preview-btn" class="px-4 py-2 bg-gray-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 transition">
-                                Preview Steps
-                            </button>
-                            <x-primary-button type="submit">
+                            <x-primary-button type="submit" id="save-btn" disabled>
                                 {{ __('Save Test Definition') }}
                             </x-primary-button>
                         </div>
@@ -139,16 +132,16 @@
             const regenerateBtn = document.getElementById('regenerate-preview');
             const form = document.getElementById('test-form');
             const descriptionField = document.getElementById('description');
-            const scopeField = document.getElementById('test_scope');
+            const saveBtn = document.getElementById('save-btn');
+            const generatedStepsField = document.getElementById('generated-steps');
+            const generatedMetadataField = document.getElementById('generated-metadata');
 
             // Template selection
             document.querySelectorAll('.template-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const description = this.dataset.description;
-                    const scope = this.dataset.scope;
                     
                     descriptionField.value = description;
-                    scopeField.value = scope;
                     
                     // Highlight selected template
                     document.querySelectorAll('.template-card').forEach(c => c.classList.remove('ring-2', 'ring-indigo-500'));
@@ -161,56 +154,94 @@
 
             function generatePreview() {
                 const description = descriptionField.value.trim();
-                const scope = scopeField.value;
+                const websiteId = document.getElementById('website_id').value;
 
-                if (!description || !scope) {
-                    alert('Please fill in both description and test scope to generate preview.');
+                if (!description) {
+                    alert('Please fill in the description to generate preview.');
                     return;
                 }
 
-                // Show loading state
-                previewContent.innerHTML = '<div class="text-indigo-600">Generating preview...</div>';
+                // Show loading state with Gemini feedback
+                previewContent.innerHTML = '<div class="flex items-center gap-3 text-indigo-600"><svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Fetching from Gemini AI...</span></div>';
                 previewSection.classList.remove('hidden');
+                
+                // Disable preview button during generation
+                previewBtn.disabled = true;
+                previewBtn.textContent = 'Generating...';
 
-                // Simulate AI generation (in real app, this would be an AJAX call)
-                setTimeout(() => {
-                    const mockSteps = generateMockSteps(description, scope);
-                    displayPreview(mockSteps);
-                }, 500);
+                // Make AJAX call to preview endpoint
+                fetch('{{ route("test-definitions.preview") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        description: description,
+                        website_id: websiteId || null
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Store generated steps and metadata in hidden fields
+                        generatedStepsField.value = JSON.stringify(data.steps);
+                        generatedMetadataField.value = JSON.stringify(data.metadata || {});
+                        displayPreview(data.steps, data.metadata);
+                        // Enable save button
+                        saveBtn.disabled = false;
+                    } else {
+                        previewContent.innerHTML = `<div class="text-red-600 bg-red-50 border border-red-200 rounded p-3">Error: ${data.error || 'Failed to generate preview'}</div>`;
+                        // Clear generated steps and disable save button
+                        generatedStepsField.value = '';
+                        generatedMetadataField.value = '';
+                        saveBtn.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    previewContent.innerHTML = `<div class="text-red-600 bg-red-50 border border-red-200 rounded p-3">Error: Failed to connect to server. Please try again.</div>`;
+                    // Clear generated steps and disable save button
+                    generatedStepsField.value = '';
+                    generatedMetadataField.value = '';
+                    saveBtn.disabled = true;
+                })
+                .finally(() => {
+                    // Re-enable preview button
+                    previewBtn.disabled = false;
+                    previewBtn.textContent = 'Generate Steps';
+                });
             }
 
-            function generateMockSteps(description, scope) {
-                const steps = [];
-                const desc = description.toLowerCase();
-
-                if (scope === 'auth' || desc.includes('login')) {
-                    steps.push({ action: 'visit', url: '/login', description: 'Navigate to login page' });
-                    steps.push({ action: 'type', selector: 'input[name="email"]', value: 'test@example.com', description: 'Enter email address' });
-                    steps.push({ action: 'type', selector: 'input[name="password"]', value: 'password', description: 'Enter password' });
-                    steps.push({ action: 'click', selector: 'button[type="submit"]', description: 'Click login button' });
-                    steps.push({ action: 'assert_url', value: '/dashboard', description: 'Verify redirect to dashboard' });
-                } else if (scope === 'form' || desc.includes('form')) {
-                    steps.push({ action: 'visit', url: '/contact', description: 'Navigate to contact form' });
-                    steps.push({ action: 'type', selector: 'input[name="name"]', value: 'John Doe', description: 'Enter name' });
-                    steps.push({ action: 'type', selector: 'textarea[name="message"]', value: 'Hello World', description: 'Enter message' });
-                    steps.push({ action: 'click', selector: 'button[type="submit"]', description: 'Submit form' });
-                    steps.push({ action: 'assert_text', value: 'Thank you', description: 'Verify success message' });
-                } else {
-                    steps.push({ action: 'visit', url: '/', description: 'Navigate to homepage' });
-                    steps.push({ action: 'assert_status', value: 200, description: 'Verify page loads successfully' });
-                }
-
-                return steps;
-            }
-
-            function displayPreview(steps) {
+            function displayPreview(steps, metadata = null) {
                 let html = '<div class="space-y-3">';
+                
                 steps.forEach((step, index) => {
+                    // Generate a description if not provided
+                    let stepDescription = step.description;
+                    if (!stepDescription) {
+                        if (step.action === 'visit') {
+                            stepDescription = `Navigate to ${step.url}`;
+                        } else if (step.action === 'type') {
+                            stepDescription = `Type "${step.value}" into ${step.selector}`;
+                        } else if (step.action === 'click') {
+                            stepDescription = `Click on ${step.selector}`;
+                        } else if (step.action === 'assert_url') {
+                            stepDescription = `Verify URL matches ${step.value}`;
+                        } else if (step.action === 'assert_text') {
+                            stepDescription = `Verify text "${step.value}" appears on page`;
+                        } else if (step.action === 'assert_status') {
+                            stepDescription = `Verify HTTP status is ${step.value}`;
+                        } else {
+                            stepDescription = `${step.action} action`;
+                        }
+                    }
+                    
                     html += `<div class="bg-white p-3 rounded border border-indigo-100">
                         <div class="flex items-start gap-3">
                             <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-xs font-bold">${index + 1}</span>
                             <div class="flex-grow">
-                                <div class="font-semibold text-gray-900">${step.description || step.action}</div>
+                                <div class="font-semibold text-gray-900">${stepDescription}</div>
                                 <div class="text-sm text-gray-600 font-mono mt-1">
                                     ${formatStep(step)}
                                 </div>
@@ -232,6 +263,15 @@
 
             previewBtn.addEventListener('click', generatePreview);
             regenerateBtn.addEventListener('click', generatePreview);
+
+            // Prevent form submission if steps haven't been generated
+            form.addEventListener('submit', function(e) {
+                if (!generatedStepsField.value || generatedStepsField.value.trim() === '') {
+                    e.preventDefault();
+                    alert('Please generate test steps before saving the test definition.');
+                    return false;
+                }
+            });
         });
     </script>
 </x-app-layout>

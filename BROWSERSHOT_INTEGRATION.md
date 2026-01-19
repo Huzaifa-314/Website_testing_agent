@@ -15,6 +15,22 @@ Laravel TestExecutionService → Browsershot (PHP) → Puppeteer (Node.js) → H
 - **Model**: `gemini-2.5-flash` (cost-effective, fast, good for structured output)
 - Used for generating test steps from descriptions
 
+### Hybrid Test Generation Approach
+
+**Phase 1: Fast Generation (No Browser)**
+- AI generates test steps from natural language description
+- Uses common patterns and heuristics
+- Fast and cost-effective
+
+**Phase 2: Optional Selector Validation (With Browser)**
+- Browsershot validates selectors exist on the page
+- Automatically fixes broken selectors
+- User can skip for faster workflow
+
+**Phase 3: Runtime Fallback**
+- If selector fails during execution, AI discovers alternatives
+- Self-healing tests with automatic selector refinement
+
 ## Available Methods
 
 | Action | Browsershot Method |

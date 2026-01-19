@@ -16,7 +16,8 @@ class TestCaseSeeder extends Seeder
         $testDefinitions = TestDefinition::all();
 
         foreach ($testDefinitions as $testDefinition) {
-            if ($testDefinition->test_scope === 'auth') {
+            $description = strtolower($testDefinition->description);
+            if (str_contains($description, 'login') || str_contains($description, 'auth')) {
                 // Login test case
                 TestCase::updateOrCreate(
                     [
@@ -36,7 +37,7 @@ class TestCaseSeeder extends Seeder
                         'status' => 'pending',
                     ]
                 );
-            } elseif ($testDefinition->test_scope === 'workflow') {
+            } elseif (str_contains($description, 'homepage') || str_contains($description, 'load')) {
                 // Homepage load test case
                 TestCase::updateOrCreate(
                     [
@@ -53,7 +54,7 @@ class TestCaseSeeder extends Seeder
                         'status' => 'pending',
                     ]
                 );
-            } elseif ($testDefinition->test_scope === 'form') {
+            } elseif (str_contains($description, 'form') || str_contains($description, 'contact')) {
                 // Contact form test case
                 TestCase::updateOrCreate(
                     [
