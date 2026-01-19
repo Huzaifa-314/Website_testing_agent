@@ -1,5 +1,5 @@
-<aside class="w-full md:w-64 flex-shrink-0 hidden md:block">
-    <nav class="sticky top-32 space-y-8 glass-effect p-6 rounded-3xl border border-gray-100 shadow-sm">
+<aside class="w-full md:w-64 flex-shrink-0 hidden md:block h-full overflow-y-auto no-scrollbar">
+    <nav class="space-y-8 glass-effect p-6 rounded-3xl border border-gray-100 shadow-sm">
         <div class="space-y-4">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Main Menu</h3>
             <ul class="space-y-1">
