@@ -1,15 +1,15 @@
 <x-dashboard-layout>
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
-            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-2">My Websites</h1>
+            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-600">My Websites</h1>
             <p class="text-gray-500 font-medium text-lg">Manage and monitor your connected digital assets.</p>
         </div>
-        <a href="{{ route('websites.create') }}" class="group relative px-8 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all hover:-translate-y-1 active:scale-95 overflow-hidden">
-            <span class="relative z-10 flex items-center gap-2">
+        <a href="{{ route('websites.create') }}" class="group relative px-8 py-4 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <div class="flex items-center gap-2 relative z-10">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
-                Add New Website
-            </span>
-            <div class="absolute inset-0 bg-gradient-to-r from-indigo-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span>Add New Website</span>
+            </div>
         </a>
     </div>
 
@@ -29,7 +29,7 @@
         <form method="GET" action="{{ route('websites.index') }}" class="space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <div class="md:col-span-6">
-                    <label for="search" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">Search Property</label>
+                    <label for="search" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">Search Website</label>
                     <div class="relative group">
                         <input 
                             type="text" 
@@ -51,7 +51,7 @@
                         <select 
                             name="status" 
                             id="status"
-                            class="w-full appearance-none pl-6 pr-12 py-4 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-semibold text-gray-700 outline-none cursor-pointer"
+                            class="w-full appearance-none bg-none pl-6 pr-12 py-4 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-semibold text-gray-700 outline-none cursor-pointer"
                         >
                             <option value="">All Statuses</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
@@ -66,12 +66,12 @@
                 </div>
 
                 <div class="md:col-span-3">
-                    <label for="sort_by" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">Sort Properties</label>
+                    <label for="sort_by" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">Sort Websites</label>
                     <div class="relative">
                         <select 
                             name="sort_by" 
                             id="sort_by"
-                            class="w-full appearance-none pl-6 pr-12 py-4 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-semibold text-gray-700 outline-none cursor-pointer"
+                            class="w-full appearance-none bg-none pl-6 pr-12 py-4 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-semibold text-gray-700 outline-none cursor-pointer"
                         >
                             <option value="created_at" {{ request('sort_by', 'created_at') === 'created_at' ? 'selected' : '' }}>Recent First</option>
                             <option value="url" {{ request('sort_by') === 'url' ? 'selected' : '' }}>URL Alphabetic</option>
@@ -104,7 +104,7 @@
                 <div class="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 transform rotate-6 group-hover:rotate-12 transition-transform duration-500 shadow-xl shadow-indigo-100">
                     <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                 </div>
-                <h3 class="text-3xl font-black text-gray-900 mb-4">Launch Your First Property</h3>
+                <h3 class="text-3xl font-black text-gray-900 mb-4">Launch Your First Website</h3>
                 <p class="text-gray-500 font-medium mb-10 max-w-md mx-auto text-xl leading-relaxed">It looks like you haven't added any websites yet. Connect your first site to start the automated testing engine.</p>
                 <a href="{{ route('websites.create') }}" class="inline-flex items-center gap-3 px-10 py-5 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-200 active:scale-95">
                     <span>Connect Website Now</span>

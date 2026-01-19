@@ -3,9 +3,9 @@
         <div class="mb-10">
             <a href="{{ route('websites.index') }}" class="inline-flex items-center text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors mb-4">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back to Property List
+                Back to Website List
             </a>
-            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-2">Connect New Property</h1>
+            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-2">Connect New Website</h1>
             <p class="text-gray-500 font-medium text-lg">Add a new website to start automated testing and monitoring.</p>
         </div>
 
@@ -14,7 +14,7 @@
                 <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-indigo-200 group-hover:rotate-12 transition-transform duration-500">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                 </div>
-                <h3 class="text-2xl font-black text-gray-900">Property Configuration</h3>
+                <h3 class="text-2xl font-black text-gray-900">Website Configuration</h3>
             </div>
             
             <div class="p-10">
@@ -48,7 +48,7 @@
                             Cancel
                         </a>
                         <button type="submit" class="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all hover:-translate-y-1 active:scale-95">
-                            Add New Property
+                            Add New Website
                         </button>
                     </div>
                 </form>
