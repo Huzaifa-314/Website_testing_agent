@@ -1,92 +1,100 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Test Definition') }}
-            </h2>
-            <a href="{{ route('test-definitions.index') }}" class="text-gray-600 hover:text-gray-900">Back to Tests</a>
+<x-dashboard-layout>
+    <div class="mb-10">
+        <div class="flex items-center gap-2 mb-4">
+            <a href="{{ route('test-definitions.index') }}" class="text-[10px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-700 transition-colors">Test Definitions</a>
+            <svg class="w-3 h-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Edit Test</span>
         </div>
-    </x-slot>
+        <h1 class="text-4xl font-black text-gray-900 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-indigo-600">
+            Edit Test Profile
+        </h1>
+        <p class="text-lg text-gray-500 font-medium mt-2">Refine your automated testing parameters.</p>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-100">
-                <div class="p-6">
-                    <form id="test-form" method="POST" action="{{ route('test-definitions.update', $testDefinition) }}">
-                        @csrf
-                        @method('PUT')
-                        
-                        <!-- Website Selection -->
-                        <div class="mb-6">
-                            <x-input-label for="website_id" :value="__('Website')" />
-                            <select id="website_id" name="website_id" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                @foreach($websites as $w)
-                                    <option value="{{ $w->id }}" {{ ($testDefinition->website_id == $w->id) || old('website_id') == $w->id ? 'selected' : '' }}>
-                                        {{ $w->url }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <x-input-error :messages="$errors->get('website_id')" class="mt-2" />
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mb-6">
-                            <x-input-label for="description" :value="__('Describe the test in natural language')" />
-                            <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Go to login page, enter valid credentials, and verify dashboard loads." required>{{ old('description', $testDefinition->description) }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                            <p class="mt-1 text-sm text-gray-500">Describe what you want to test in plain English.</p>
-                            
-                            <!-- Generate Steps Button -->
-                            <div class="mt-4">
-                                <button type="button" id="preview-btn" class="px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-widest hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                    Generate Steps
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Hidden fields to store generated steps and metadata -->
-                        <input type="hidden" id="generated-steps" name="generated_steps" value="">
-                        <input type="hidden" id="generated-metadata" name="generated_metadata" value="">
-
-                        <!-- Preview Section -->
-                        <div id="preview-section" class="mb-6 hidden">
-                            <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-                                <h3 class="text-lg font-semibold text-indigo-900 mb-3">Generated Test Steps Preview</h3>
-                                <div id="preview-content" class="space-y-2">
-                                    <!-- Preview will be generated here -->
-                                </div>
-                                <button type="button" id="regenerate-preview" class="mt-3 text-sm text-indigo-600 hover:text-indigo-800 font-medium">
-                                    Regenerate Steps
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Current Steps Preview (if exists and no new steps generated) -->
-                        @if($testDefinition->testCases->isNotEmpty() && $testDefinition->testCases->first()->steps)
-                            <div id="current-steps-section" class="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                <h3 class="text-sm font-semibold text-gray-700 mb-2">Current Test Steps</h3>
-                                <div class="space-y-2">
-                                    @foreach($testDefinition->testCases->first()->steps as $index => $step)
-                                        <div class="text-sm text-gray-600 font-mono bg-white p-2 rounded">
-                                            <span class="font-semibold">{{ $index + 1 }}.</span> {{ $step['action'] ?? 'N/A' }}
-                                            @if(isset($step['selector'])) → {{ $step['selector'] }} @endif
-                                            @if(isset($step['value'])) → {{ $step['value'] }} @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <p class="mt-2 text-xs text-gray-500">These steps will be replaced when you generate new steps.</p>
-                            </div>
-                        @endif
-
-                        <div class="flex items-center justify-end gap-4 mt-6">
-                            <a href="{{ route('test-definitions.index') }}" class="text-gray-600 hover:text-gray-900 underline">Cancel</a>
-                            <x-primary-button type="submit" id="save-btn">
-                                {{ __('Update Test Definition') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+    <div class="max-w-4xl">
+        <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-8 lg:p-10 relative overflow-hidden">
+            <form id="test-form" method="POST" action="{{ route('test-definitions.update', $testDefinition) }}" class="space-y-8 relative z-10">
+                @csrf
+                @method('PUT')
+                
+                <!-- Website Selection -->
+                <div class="space-y-4">
+                    <label for="website_id" class="inline-block px-3 py-1 bg-indigo-50 rounded-full text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Target Website</label>
+                    <div class="relative group">
+                        <select id="website_id" name="website_id" required class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none shadow-inner group-hover:bg-gray-50/80">
+                            @foreach($websites as $w)
+                                <option value="{{ $w->id }}" {{ ($testDefinition->website_id == $w->id) || old('website_id') == $w->id ? 'selected' : '' }}>
+                                    {{ $w->url }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <svg class="w-5 h-5 text-gray-400 absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <x-input-error :messages="$errors->get('website_id')" class="mt-2" />
                 </div>
-            </div>
+
+                <!-- Description -->
+                <div class="space-y-4">
+                    <label for="description" class="inline-block px-3 py-1 bg-indigo-50 rounded-full text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Describe User Flow</label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        rows="4" 
+                        class="w-full p-6 rounded-3xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 placeholder-gray-400 shadow-inner group-hover:bg-gray-50/80 leading-relaxed" 
+                        placeholder="e.g., Navigate to login page, enter my email and password..." 
+                        required>{{ old('description', $testDefinition->description) }}</textarea>
+                    <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                    
+                    <div class="flex items-center justify-between pt-4">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">Powered by Gemini AI Engine</p>
+                        <button type="button" id="preview-btn" class="group px-8 py-3 bg-indigo-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 active:scale-95 flex items-center gap-2">
+                            <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span>Regenerate Steps</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden fields for new steps -->
+                <input type="hidden" id="generated-steps" name="generated_steps" value="">
+                <input type="hidden" id="generated-metadata" name="generated_metadata" value="">
+
+                <!-- New Preview Section -->
+                <div id="preview-section" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="bg-indigo-50/50 border border-indigo-100 rounded-[2rem] p-8 lg:p-10">
+                        <div class="flex items-center justify-between mb-8">
+                            <h3 class="text-sm font-black text-indigo-900 uppercase tracking-widest leading-none">New Execution Plan</h3>
+                            <button type="button" id="regenerate-preview" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Retry AI Generation</button>
+                        </div>
+                        <div id="preview-content" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- Current Steps Preview (if no new steps generated) -->
+                @if($testDefinition->testCases->isNotEmpty() && $testDefinition->testCases->first()->steps)
+                    <div id="current-steps-section" class="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-8">
+                        <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6">Current Execution Steps</h3>
+                        <div class="space-y-3">
+                            @foreach($testDefinition->testCases->first()->steps as $index => $step)
+                                <div class="bg-white p-4 rounded-xl border border-gray-100/50 flex items-center gap-4">
+                                    <span class="flex-shrink-0 w-6 h-6 bg-gray-50 text-gray-400 rounded flex items-center justify-center text-[10px] font-black">{{ $index + 1 }}</span>
+                                    <div class="text-[11px] font-bold text-gray-600 font-mono flex-grow">
+                                        <span class="text-indigo-500 uppercase">{{ $step['action'] ?? 'N/A' }}</span> 
+                                        @if(isset($step['selector'])) <span class="text-gray-300 px-1">|</span> {{ $step['selector'] }} @endif
+                                        @if(isset($step['value'])) <span class="text-gray-300 px-1">|</span> {{ $step['value'] }} @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <div class="flex items-center justify-end gap-6 pt-6 border-t border-gray-50">
+                    <a href="{{ route('test-definitions.index') }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-900">Cancel</a>
+                    <button type="submit" id="save-btn" class="px-10 py-4 bg-gray-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200">
+                        Update Definition
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -108,24 +116,24 @@
                 const websiteId = document.getElementById('website_id').value;
 
                 if (!description) {
-                    alert('Please fill in the description to generate preview.');
+                    alert('Please describe your user flow first.');
                     return;
                 }
 
-                // Show loading state with Gemini feedback
-                previewContent.innerHTML = '<div class="flex items-center gap-3 text-indigo-600"><svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Fetching from Gemini AI...</span></div>';
+                previewContent.innerHTML = `
+                    <div class="flex flex-col items-center justify-center p-8 text-indigo-600 bg-white rounded-2xl border border-indigo-100 shadow-inner">
+                        <div class="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest animate-pulse">Redesigning steps...</span>
+                    </div>`;
                 previewSection.classList.remove('hidden');
                 
-                // Hide current steps section when generating new steps
                 if (currentStepsSection) {
                     currentStepsSection.classList.add('hidden');
                 }
                 
-                // Disable preview button during generation
                 previewBtn.disabled = true;
-                previewBtn.textContent = 'Generating...';
+                previewBtn.innerHTML = '<span>Processing...</span>';
 
-                // Make AJAX call to preview endpoint
                 fetch('{{ route("test-definitions.preview") }}', {
                     method: 'POST',
                     headers: {
@@ -140,87 +148,56 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Store generated steps and metadata in hidden fields
                         generatedStepsField.value = JSON.stringify(data.steps);
                         generatedMetadataField.value = JSON.stringify(data.metadata || {});
                         displayPreview(data.steps, data.metadata);
+                        previewSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     } else {
-                        previewContent.innerHTML = `<div class="text-red-600 bg-red-50 border border-red-200 rounded p-3">Error: ${data.error || 'Failed to generate preview'}</div>`;
-                        // Clear generated steps
+                        previewContent.innerHTML = `<div class="text-red-600 font-bold p-6 bg-white rounded-2xl border border-red-100 text-center text-xs">AI Error: ${data.error || 'Failed to design steps'}</div>`;
                         generatedStepsField.value = '';
                         generatedMetadataField.value = '';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    previewContent.innerHTML = `<div class="text-red-600 bg-red-50 border border-red-200 rounded p-3">Error: Failed to connect to server. Please try again.</div>`;
-                    // Clear generated steps
+                    previewContent.innerHTML = `<div class="text-red-600 font-bold p-6 bg-white rounded-2xl border border-red-100 text-center text-xs">Connection Error</div>`;
                     generatedStepsField.value = '';
                     generatedMetadataField.value = '';
                 })
                 .finally(() => {
-                    // Re-enable preview button
                     previewBtn.disabled = false;
-                    previewBtn.textContent = 'Generate Steps';
+                    previewBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><span>Regenerate Steps</span>';
                 });
             }
 
             function displayPreview(steps, metadata = null) {
                 let html = '<div class="space-y-3">';
-                
                 steps.forEach((step, index) => {
-                    // Generate a description if not provided
-                    let stepDescription = step.description;
-                    if (!stepDescription) {
-                        if (step.action === 'visit') {
-                            stepDescription = `Navigate to ${step.url}`;
-                        } else if (step.action === 'type') {
-                            stepDescription = `Type "${step.value}" into ${step.selector}`;
-                        } else if (step.action === 'click') {
-                            stepDescription = `Click on ${step.selector}`;
-                        } else if (step.action === 'assert_url') {
-                            stepDescription = `Verify URL matches ${step.value}`;
-                        } else if (step.action === 'assert_text') {
-                            stepDescription = `Verify text "${step.value}" appears on page`;
-                        } else if (step.action === 'assert_status') {
-                            stepDescription = `Verify HTTP status is ${step.value}`;
-                        } else {
-                            stepDescription = `${step.action} action`;
-                        }
-                    }
-                    
-                    html += `<div class="bg-white p-3 rounded border border-indigo-100">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-xs font-bold">${index + 1}</span>
+                    html += `
+                        <div class="bg-white p-4 rounded-xl border border-indigo-100 flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 bg-indigo-50 text-indigo-600 rounded flex items-center justify-center text-[10px] font-black">${index + 1}</div>
                             <div class="flex-grow">
-                                <div class="font-semibold text-gray-900">${stepDescription}</div>
-                                <div class="text-sm text-gray-600 font-mono mt-1">
+                                <div class="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-1">${step.action || 'Action'}</div>
+                                <div class="text-[9px] font-bold text-gray-400 font-mono tracking-wider break-all bg-gray-50/50 p-2 rounded-lg">
                                     ${formatStep(step)}
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
+                        </div>`;
                 });
                 html += '</div>';
                 previewContent.innerHTML = html;
             }
 
             function formatStep(step) {
-                let parts = [`action: ${step.action}`];
-                if (step.url) parts.push(`url: ${step.url}`);
-                if (step.selector) parts.push(`selector: ${step.selector}`);
-                if (step.value) parts.push(`value: ${step.value}`);
+                let parts = [];
+                if (step.url) parts.push(`path: ${step.url}`);
+                if (step.selector) parts.push(`el: ${step.selector}`);
+                if (step.value) parts.push(`val: ${step.value}`);
                 return parts.join(' | ');
             }
 
             previewBtn.addEventListener('click', generatePreview);
             regenerateBtn.addEventListener('click', generatePreview);
-
-            // Update form submission to include generated steps if available
-            form.addEventListener('submit', function(e) {
-                // If steps were generated, they will be included via hidden fields
-                // If no steps were generated, use existing steps (allow update without regeneration)
-            });
         });
     </script>
-</x-app-layout>
+</x-dashboard-layout>
