@@ -1,72 +1,68 @@
 <x-dashboard-layout>
-    <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
-        <div class="p-8 lg:p-12">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                <div>
-                    <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-3">Welcome back, {{ Auth::user()->name }}!</h1>
-                    <p class="text-lg text-gray-500 font-medium">Your testing agent is ready to assist you.</p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div>
+            <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-3">Welcome back, {{ Auth::user()->name }}!</h1>
+            <p class="text-lg text-gray-500 font-medium">Your testing agent is ready to assist you.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="px-6 py-4 rounded-2xl bg-white border border-gray-100 flex items-center gap-4 shadow-sm">
+                <div class="bg-green-100 p-2 rounded-lg">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="px-6 py-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center gap-4">
-                        <div class="bg-green-100 p-2 rounded-lg">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div>
-                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Agent Status</div>
-                            <div class="text-sm font-bold text-gray-900">Online & Ready</div>
-                        </div>
-                    </div>
+                <div>
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Agent Status</div>
+                    <div class="text-sm font-bold text-gray-900">Online & Ready</div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="group p-8 rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="group p-8 rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
-                    
-                    <h3 class="text-2xl font-bold mb-4 relative z-10 text-white">Quick Actions</h3>
-                    <div class="space-y-4 mt-6 relative z-10">
-                        <a href="{{ route('test-definitions.create') }}" class="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
-                            <span class="bg-white/20 p-3 rounded-xl group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-all font-bold">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            </span>
-                            <span class="text-lg font-bold">Create New Test</span>
-                        </a>
-                        <a href="{{ route('websites.index') }}" class="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
-                            <span class="bg-white/20 p-3 rounded-xl group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-all font-bold text-white">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                            </span>
-                            <span class="text-lg font-bold">Manage Websites</span>
-                        </a>
-                    </div>
+            <h3 class="text-2xl font-bold mb-4 relative z-10 text-white">Quick Actions</h3>
+            <div class="space-y-4 mt-6 relative z-10">
+                <a href="{{ route('test-definitions.create') }}" class="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
+                    <span class="bg-white/20 p-3 rounded-xl group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-all font-bold">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </span>
+                    <span class="text-lg font-bold">Create New Test</span>
+                </a>
+                <a href="{{ route('websites.index') }}" class="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
+                    <span class="bg-white/20 p-3 rounded-xl group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-all font-bold text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    </span>
+                    <span class="text-lg font-bold">Manage Websites</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6">
+            <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                        </div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Runs</div>
-                        <div class="text-3xl font-black text-gray-900 mt-1">{{ $stats['test_runs_count'] }}</div>
-                    </div>
-                    
-                    <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        </div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Websites</div>
-                        <div class="text-xl font-black text-gray-900 mt-1">{{ $stats['websites_count'] }}</div>
-                    </div>
-                    
-                    <div class="col-span-2 p-6 rounded-3xl bg-gray-900 text-white flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-gray-800 p-2 rounded-xl">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div class="text-sm font-medium">Need help? Explorer our documentation</div>
-                        </div>
-                        <a href="{{ route('docs') }}" class="text-xs font-bold uppercase tracking-widest hover:text-indigo-400 transition-colors">Read Docs</a>
-                    </div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Runs</div>
+                <div class="text-3xl font-black text-gray-900 mt-1">{{ $stats['test_runs_count'] }}</div>
+            </div>
+            
+            <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                 </div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Websites</div>
+                <div class="text-xl font-black text-gray-900 mt-1">{{ $stats['websites_count'] }}</div>
+            </div>
+            
+            <div class="col-span-2 p-6 rounded-3xl bg-gray-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-gray-800 p-2 rounded-xl">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="text-sm font-medium">Need help? Explorer our documentation</div>
+                </div>
+                <a href="{{ route('docs') }}" class="text-xs font-bold uppercase tracking-widest hover:text-indigo-400 transition-colors">Read Docs</a>
             </div>
         </div>
     </div>
