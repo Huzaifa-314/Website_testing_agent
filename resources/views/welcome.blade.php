@@ -136,12 +136,6 @@
         <!-- Hero Section -->
         <main class="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4 md:px-6 py-20 md:py-32 hero-bg">
             <div class="max-w-5xl mx-auto fade-in">
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-pink-50 via-purple-50 to-indigo-50 border border-purple-100 text-purple-700 text-sm font-medium mb-8">
-                    <span class="flex h-2 w-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse"></span>
-                    v1.0 Prototype Live
-                </div>
-                
                 <!-- Main Headline -->
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-8 leading-tight">
                     <span class="text-gray-900">The AI QA Engineer</span><br/>
