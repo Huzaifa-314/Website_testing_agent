@@ -21,7 +21,7 @@
                 <div class="space-y-4">
                     <label for="website_id" class="inline-block px-3 py-1 bg-indigo-50 rounded-full text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Target Website</label>
                     <div class="relative group">
-                        <select id="website_id" name="website_id" required class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none shadow-inner group-hover:bg-gray-50/80">
+                        <select id="website_id" name="website_id" required class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none bg-none shadow-inner group-hover:bg-gray-50/80">
                             @foreach($websites as $w)
                                 <option value="{{ $w->id }}" {{ ($testDefinition->website_id == $w->id) || old('website_id') == $w->id ? 'selected' : '' }}>
                                     {{ $w->url }}
@@ -47,7 +47,7 @@
                     
                     <div class="flex items-center justify-between pt-4">
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">Powered by Gemini AI Engine</p>
-                        <button type="button" id="preview-btn" class="group px-8 py-3 bg-indigo-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 active:scale-95 flex items-center gap-2">
+                        <button type="button" id="preview-btn" class="group px-8 py-3 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-indigo-200 transition-all shadow-xl shadow-indigo-100 active:scale-95 flex items-center gap-2">
                             <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             <span>Regenerate Steps</span>
                         </button>
@@ -90,7 +90,7 @@
 
                 <div class="flex items-center justify-end gap-6 pt-6 border-t border-gray-50">
                     <a href="{{ route('test-definitions.index') }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-900">Cancel</a>
-                    <button type="submit" id="save-btn" class="px-10 py-4 bg-gray-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200">
+                    <button type="submit" id="save-btn" class="px-10 py-4 bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:scale-105 transition-all shadow-xl shadow-gray-200">
                         Update Definition
                     </button>
                 </div>

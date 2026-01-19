@@ -7,7 +7,7 @@
             <p class="text-lg text-gray-500 font-medium">Define, automate, and monitor your quality assurance tests.</p>
         </div>
         <div class="flex items-center gap-4">
-            <a href="{{ route('test-definitions.create') }}" class="group relative px-8 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+            <a href="{{ route('test-definitions.create') }}" class="group relative px-8 py-4 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:-translate-y-1 active:translate-y-0 overflow-hidden">
                 <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <div class="flex items-center gap-2 relative z-10">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
@@ -53,7 +53,7 @@
                             <select 
                                 name="website_id" 
                                 id="website_id"
-                                class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/30 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none shadow-inner group-hover:bg-gray-50/50"
+                                class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/30 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none bg-none shadow-inner group-hover:bg-gray-50/50"
                             >
                                 <option value="">All Websites</option>
                                 @foreach($websites as $website)
@@ -72,7 +72,7 @@
                             <select 
                                 name="last_result" 
                                 id="last_result"
-                                class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/30 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none shadow-inner group-hover:bg-gray-50/50"
+                                class="w-full h-[60px] pl-6 pr-12 rounded-2xl border-gray-100 bg-gray-50/30 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-semibold text-gray-700 appearance-none bg-none shadow-inner group-hover:bg-gray-50/50"
                             >
                                 <option value="">All Statuses</option>
                                 <option value="pass" {{ request('last_result') === 'pass' ? 'selected' : '' }}>Pass</option>
@@ -89,7 +89,7 @@
                             Clear All
                         </a>
                     @endif
-                    <button type="submit" class="px-10 py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200">
+                    <button type="submit" class="px-10 py-4 bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-xl shadow-gray-200">
                         Apply Filters
                     </button>
                 </div>
@@ -162,7 +162,7 @@
                                     <div class="w-px h-4 bg-gray-200 mx-1"></div>
                                     <form method="POST" action="{{ route('test-definitions.run', $testDefinition) }}" class="inline">
                                         @csrf
-                                        <button type="submit" class="px-5 py-2 bg-emerald-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl hover:bg-emerald-700 hover:shadow-emerald-100 transition-all shadow-lg shadow-emerald-50 active:scale-95 flex items-center gap-2">
+                                        <button type="submit" class="px-5 py-2 bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl hover:shadow-emerald-200 transition-all shadow-lg shadow-emerald-50 active:scale-95 flex items-center gap-2">
                                             Run
                                         </button>
                                     </form>
