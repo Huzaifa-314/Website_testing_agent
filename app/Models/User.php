@@ -84,6 +84,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasManyThrough(TestDefinition::class, Website::class);
     }
 
+    public function testRuns()
+    {
+        return TestRun::whereHas('testCase.testDefinition.website', function ($query) {
+            $query->where('user_id', $this->id);
+        });
+    }
+
 
     /**
      * Get total test runs count for this user.

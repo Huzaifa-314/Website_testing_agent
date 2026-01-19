@@ -51,7 +51,9 @@
             <div class="gradient-orb bg-indigo-500 w-96 h-96 bottom-0 left-1/3" style="animation-delay: 4s;"></div>
 
             <div class="relative z-10 flex flex-col min-h-screen">
-                @include('layouts.navigation')
+                @if(!isset($hideNav) || !$hideNav)
+                    @include('layouts.navigation')
+                @endif
 
                 <!-- Page Heading -->
                 @isset($header)
@@ -63,7 +65,7 @@
                 @endisset
 
                 <!-- Page Content -->
-                <main class="py-10 flex-grow">
+                <main class="{{ $mainClass ?? 'py-10' }} flex-grow">
                     {{ $slot }}
                 </main>
             </div>

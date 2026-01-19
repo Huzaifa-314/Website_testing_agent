@@ -19,7 +19,29 @@ Route::get('/dashboard', function () {
     if (auth()->user()->isAdmin()) {
         return redirect()->route('admin.dashboard');
     }
-    return redirect()->route('websites.index');
+    
+    $testDefinitions = auth()->user()->testDefinitions()
+        ->with('website')
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+    $recentRuns = auth()->user()->testRuns()
+        ->with('testCase.testDefinition.website')
+        ->latest()
+        ->take(3)
+        ->get();
+
+    $stats = [
+        'test_definitions_count' => $testDefinitions->count(),
+        'test_runs_count' => auth()->user()->getTestRunsCount(),
+        'websites_count' => auth()->user()->websites()->count(),
+    ];
+    $websites = auth()->user()->websites()
+        ->withCount('testDefinitions')
+        ->orderBy('url')
+        ->get();
+        
+    return view('dashboard', compact('testDefinitions', 'recentRuns', 'stats', 'websites'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
